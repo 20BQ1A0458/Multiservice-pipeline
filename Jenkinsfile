@@ -8,6 +8,7 @@ pipeline {
         stage('Checkout Auth Service') {
             steps {
                 script {
+                    // Checkout AuthService repository
                     git credentialsId: 'github-admin-creds', branch: 'master', url: 'https://github.com/qclairvoyance12/AuthService.git'
                 }
             }
@@ -16,7 +17,10 @@ pipeline {
             steps {
                 script {
                     try {
-                        bat "cd AuthService && echo 'Building AuthService Docker Image' && docker build -t ${DOCKER_REGISTRY}/authservice ."
+                        // Ensure you're in the right directory after checkout
+                        echo 'Building AuthService Docker Image'
+                        bat 'echo "Current directory: %cd%"'  // To print the current directory
+                        bat "docker build -t ${DOCKER_REGISTRY}/authservice ${WORKSPACE}/AuthService"
                         bat "docker push ${DOCKER_REGISTRY}/authservice"
                     } catch (Exception e) {
                         echo "Auth Service Build or Push failed: ${e.message}"
@@ -55,4 +59,3 @@ pipeline {
         }
     }
 }
-
