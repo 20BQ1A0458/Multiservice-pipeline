@@ -10,21 +10,21 @@ pipeline {
                 stage('Auth Service') {
                     steps {
                         script {
-                            git credentialsId: 'github-admin-creds', branch: 'main', url: 'https://github.com/qclairvoyance12/AuthService.git'
+                            git credentialsId: 'github-admin-creds', branch: 'master', url: 'https://github.com/qclairvoyance12/AuthService.git'
                         }
                     }
                 }
                 stage('OTP Service') {
                     steps {
                         script {
-                            git credentialsId: 'github-admin-creds', branch: 'main', url: 'https://github.com/qclairvoyance12/OtpService.git'
+                            git credentialsId: 'github-admin-creds', branch: 'master', url: 'https://github.com/qclairvoyance12/OtpService.git'
                         }
                     }
                 }
                 stage('Mail Service') {
                     steps {
                         script {
-                            git credentialsId: 'github-admin-creds', branch: 'main', url: 'https://github.com/qclairvoyance12/MailService.git'
+                            git credentialsId: 'github-admin-creds', branch: 'master', url: 'https://github.com/qclairvoyance12/MailService.git'
                         }
                     }
                 }
