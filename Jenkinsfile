@@ -19,8 +19,12 @@ pipeline {
                     try {
                         // Ensure you're in the right directory after checkout
                         echo 'Building AuthService Docker Image'
+                        
+                        // Ensure the path is quoted properly for directories with spaces
                         bat 'echo "Current directory: %cd%"'  // To print the current directory
-                        bat "docker build -t ${DOCKER_REGISTRY}/authservice ${WORKSPACE}/AuthService"
+                        
+                        // Use the correct docker build command
+                        bat "docker build -t ${DOCKER_REGISTRY}/authservice \"${WORKSPACE}\\AuthService\""
                         bat "docker push ${DOCKER_REGISTRY}/authservice"
                     } catch (Exception e) {
                         echo "Auth Service Build or Push failed: ${e.message}"
