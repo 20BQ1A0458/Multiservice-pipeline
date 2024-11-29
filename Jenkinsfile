@@ -9,17 +9,23 @@ pipeline {
             parallel {
                 stage('Auth Service') {
                     steps {
-                        git branch: 'main', url: 'https://github.com/qclairvoyance12/AuthService.git'
+                        script {
+                            git credentialsId: 'github-admin-creds', branch: 'main', url: 'https://github.com/qclairvoyance12/AuthService.git'
+                        }
                     }
                 }
                 stage('OTP Service') {
                     steps {
-                        git branch: 'main', url: 'https://github.com/qclairvoyance12/OtpService.git'
+                        script {
+                            git credentialsId: 'github-admin-creds', branch: 'main', url: 'https://github.com/qclairvoyance12/OtpService.git'
+                        }
                     }
                 }
                 stage('Mail Service') {
                     steps {
-                        git branch: 'main', url: 'https://github.com/qclairvoyance12/MailService.git'
+                        script {
+                            git credentialsId: 'github-admin-creds', branch: 'main', url: 'https://github.com/qclairvoyance12/MailService.git'
+                        }
                     }
                 }
             }
@@ -70,3 +76,11 @@ pipeline {
         }
     }
 }
+
+
+
+
+
+
+
+
