@@ -30,21 +30,30 @@ pipeline {
                 }
             }
         }
-        stage('Build Services') {
+        stage('Build and Push Services') {
             parallel {
-                stage('Build Auth Service') {
+                stage('Build and Push Auth Service') {
                     steps {
-                        bat 'cd AuthService && docker build -t %DOCKER_REGISTRY%/authservice .'
+                        script {
+                            bat 'cd AuthService && docker build -t %DOCKER_REGISTRY%/authservice .'
+                            bat 'docker push %DOCKER_REGISTRY%/authservice'
+                        }
                     }
                 }
-                stage('Build OTP Service') {
+                stage('Build and Push OTP Service') {
                     steps {
-                        bat 'cd OtpService && docker build -t %DOCKER_REGISTRY%/otpservice .'
+                        script {
+                            bat 'cd OtpService && docker build -t %DOCKER_REGISTRY%/otpservice .'
+                            bat 'docker push %DOCKER_REGISTRY%/otpservice'
+                        }
                     }
                 }
-                stage('Build Mail Service') {
+                stage('Build and Push Mail Service') {
                     steps {
-                        bat 'cd MailService && docker build -t %DOCKER_REGISTRY%/mailservice .'
+                        script {
+                            bat 'cd MailService && docker build -t %DOCKER_REGISTRY%/mailservice .'
+                            bat 'docker push %DOCKER_REGISTRY%/mailservice'
+                        }
                     }
                 }
             }
@@ -76,23 +85,3 @@ pipeline {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
