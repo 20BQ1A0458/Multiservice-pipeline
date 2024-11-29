@@ -35,24 +35,39 @@ pipeline {
                 stage('Build and Push Auth Service') {
                     steps {
                         script {
-                            bat 'cd AuthService && docker build -t %DOCKER_REGISTRY%/authservice .'
-                            bat 'docker push %DOCKER_REGISTRY%/authservice'
+                            try {
+                                bat "cd AuthService && echo 'Building AuthService Docker Image' && docker build -t ${DOCKER_REGISTRY}/authservice ."
+                                bat "docker push ${DOCKER_REGISTRY}/authservice"
+                            } catch (Exception e) {
+                                echo "Auth Service Build or Push failed: ${e.message}"
+                                currentBuild.result = 'FAILURE'
+                            }
                         }
                     }
                 }
                 stage('Build and Push OTP Service') {
                     steps {
                         script {
-                            bat 'cd OtpService && docker build -t %DOCKER_REGISTRY%/otpservice .'
-                            bat 'docker push %DOCKER_REGISTRY%/otpservice'
+                            try {
+                                bat "cd OtpService && echo 'Building OTP Docker Image' && docker build -t ${DOCKER_REGISTRY}/otpservice ."
+                                bat "docker push ${DOCKER_REGISTRY}/otpservice"
+                            } catch (Exception e) {
+                                echo "OTP Service Build or Push failed: ${e.message}"
+                                currentBuild.result = 'FAILURE'
+                            }
                         }
                     }
                 }
                 stage('Build and Push Mail Service') {
                     steps {
                         script {
-                            bat 'cd MailService && docker build -t %DOCKER_REGISTRY%/mailservice .'
-                            bat 'docker push %DOCKER_REGISTRY%/mailservice'
+                            try {
+                                bat "cd MailService && echo 'Building MailService Docker Image' && docker build -t ${DOCKER_REGISTRY}/mailservice ."
+                                bat "docker push ${DOCKER_REGISTRY}/mailservice"
+                            } catch (Exception e) {
+                                echo "Mail Service Build or Push failed: ${e.message}"
+                                currentBuild.result = 'FAILURE'
+                            }
                         }
                     }
                 }
@@ -61,13 +76,16 @@ pipeline {
         stage('Deploy with Docker Compose') {
             steps {
                 script {
-                    bat '''
-                    REM Navigate to the directory containing docker-compose.yml
-                    cd C:\\Users\\gowri\\multi
-                    
-                    REM Run Docker Compose to bring up the services
-                    docker-compose -f docker-compose.yml up -d
-                    '''
+                    try {
+                        echo 'Running Docker Compose to deploy services...'
+                        bat '''
+                        cd C:\\Users\\gowri\\multi
+                        docker-compose -f docker-compose.yml up -d
+                        '''
+                    } catch (Exception e) {
+                        echo "Docker Compose Deployment failed: ${e.message}"
+                        currentBuild.result = 'FAILURE'
+                    }
                 }
             }
         }
@@ -81,9 +99,7 @@ pipeline {
             echo 'Pipeline executed successfully.'
         }
         failure {
-            echo 'Pipeline failed.'
+            echo 'Pipeline failed. Please check the logs for errors.'
         }
     }
 }
-
-
