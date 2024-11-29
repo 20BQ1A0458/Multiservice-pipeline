@@ -1,9 +1,0 @@
-[submodule "AuthService"]
-	path = AuthService
-	url = https://github.com/qclairvoyance12/AuthService.git
-[submodule "OtpService"]
-	path = OtpService
-	url = https://github.com/qclairvoyance12/OtpService.git
-[submodule "MailService"]
-	path = MailService
-	url = https://github.com/qclairvoyance12/MailService.git
