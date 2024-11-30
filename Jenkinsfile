@@ -30,7 +30,7 @@ pipeline {
                         script {
                             dir('Auth-service') {
                                 // Windows command to build Docker image
-                                bat 'docker build -t %DOCKER_HUB_USERNAME%/auth-service:latest .'
+                                bat 'docker build -t %DOCKER_HUB_USERNAME%/auth-service:latest . -f "C:\ProgramData\Jenkins\.jenkins\workspace\MultiService Pipeline@2@tmp\multi\AuthService\Dockerfile" .'
                             }
                         }
                     }
