@@ -30,7 +30,7 @@ pipeline {
                         script {
                             dir('Auth-service') {
                                 // Windows command to build Docker image
-                                bat 'docker build -t %DOCKER_HUB_USERNAME%/Auth-service:latest .'
+                                bat 'docker build -t %DOCKER_HUB_USERNAME%/auth-service:latest .'
                             }
                         }
                     }
@@ -40,7 +40,7 @@ pipeline {
                         script {
                             dir('Otp-service') {
                                 // Windows command to build Docker image
-                                bat 'docker build -t %DOCKER_HUB_USERNAME%/Otp-service:latest .'
+                                bat 'docker build -t %DOCKER_HUB_USERNAME%/otp-service:latest .'
                             }
                         }
                     }
@@ -50,7 +50,7 @@ pipeline {
                         script {
                             dir('Mail-service') {
                                 // Windows command to build Docker image
-                                bat 'docker build -t %DOCKER_HUB_USERNAME%/Mail-service:latest .'
+                                bat 'docker build -t %DOCKER_HUB_USERNAME%/mail-service:latest .'
                             }
                         }
                     }
