@@ -9,15 +9,15 @@ pipeline {
                 script {
                     // Checkout code for all three repositories
                     // Checkout auth-service
-                    dir('Auth-service') {
+                    dir('MultiService Pipeline@2@tmp\\multi\\AuthService') {
                         checkout scm
                     }
                     // Checkout otp-service
-                    dir('Otp-service') {
+                    dir('MultiService Pipeline@2@tmp\\multi\\OtpService') {
                         checkout scm
                     }
                     // Checkout mail-service
-                    dir('Mail-service') {
+                    dir('MultiService Pipeline@2@tmp\\multi\\MailService') {
                         checkout scm
                     }
                 }
@@ -28,7 +28,7 @@ pipeline {
                 stage('Build Auth Service') {
                     steps {
                         script {
-                            dir('Auth-service') {
+                            dir('MultiService Pipeline@2@tmp\\multi\\AuthService') {
                                 // Windows command to build Docker image
                                 bat 'docker build -t %DOCKER_HUB_USERNAME%/auth-service:latest .'
                             }
@@ -38,7 +38,7 @@ pipeline {
                 stage('Build OTP Service') {
                     steps {
                         script {
-                            dir('Otp-service') {
+                            dir('MultiService Pipeline@2@tmp\\multi\\OtpService') {
                                 // Windows command to build Docker image
                                 bat 'docker build -t %DOCKER_HUB_USERNAME%/otp-service:latest .'
                             }
@@ -48,7 +48,7 @@ pipeline {
                 stage('Build Mail Service') {
                     steps {
                         script {
-                            dir('Mail-service') {
+                            dir('MultiService Pipeline@2@tmp\\multi\\MailService') {
                                 // Windows command to build Docker image
                                 bat 'docker build -t %DOCKER_HUB_USERNAME%/mail-service:latest .'
                             }
