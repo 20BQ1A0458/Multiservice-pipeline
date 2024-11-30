@@ -9,15 +9,15 @@ pipeline {
                 script {
                     // Checkout code for all three repositories
                     // Checkout auth-service
-                    dir('MultiService Pipeline@2@tmp\\multi\\AuthService') {
+                    dir('MultiService Pipeline@2@tmp\\multi\\AuthService\\Dockerfile') {
                         checkout scm
                     }
                     // Checkout otp-service
-                    dir('MultiService Pipeline@2@tmp\\multi\\OtpService') {
+                    dir('MultiService Pipeline@2@tmp\\multi\\OtpService\\Dockerfile') {
                         checkout scm
                     }
                     // Checkout mail-service
-                    dir('MultiService Pipeline@2@tmp\\multi\\MailService') {
+                    dir('MultiService Pipeline@2@tmp\\multi\\MailService\\Dockerfile') {
                         checkout scm
                     }
                 }
@@ -28,7 +28,7 @@ pipeline {
                 stage('Build Auth Service') {
                     steps {
                         script {
-                            dir('MultiService Pipeline@2@tmp\\multi\\AuthService') {
+                            dir('MultiService Pipeline@2@tmp\\multi\\AuthService\\Dockerfile') {
                                 // Windows command to build Docker image
                                 bat 'docker build -t %DOCKER_HUB_USERNAME%/auth-service:latest .'
                             }
@@ -38,7 +38,7 @@ pipeline {
                 stage('Build OTP Service') {
                     steps {
                         script {
-                            dir('MultiService Pipeline@2@tmp\\multi\\OtpService') {
+                            dir('MultiService Pipeline@2@tmp\\multi\\OtpService\\Dockerfile') {
                                 // Windows command to build Docker image
                                 bat 'docker build -t %DOCKER_HUB_USERNAME%/otp-service:latest .'
                             }
@@ -48,7 +48,7 @@ pipeline {
                 stage('Build Mail Service') {
                     steps {
                         script {
-                            dir('MultiService Pipeline@2@tmp\\multi\\MailService') {
+                            dir('MultiService Pipeline@2@tmp\\multi\\MailService\\Dockerfile') {
                                 // Windows command to build Docker image
                                 bat 'docker build -t %DOCKER_HUB_USERNAME%/mail-service:latest .'
                             }
