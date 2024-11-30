@@ -1,45 +1,24 @@
 pipeline {
     agent any
     environment {
-        DOCKER_HUB_USERNAME = 'bhargavram458' // This can be kept as plain text in the script
+        DOCKER_HUB_USERNAME = 'your-dockerhub-username' // This can be kept as plain text in the script
     }
     stages {
         stage('Checkout Repos') {
             steps {
                 script {
-                    // Checkout code for all three repositories using credentials for private repos
-                    // Checkout Auth-service
+                    // Checkout code for all three repositories
+                    // Checkout auth-service
                     dir('Auth-service') {
-                        checkout([
-                            $class: 'GitSCM',
-                            branches: [[name: '*/master']], // or the branch you want to use
-                            userRemoteConfigs: [[
-                                url: 'https://github.com/20BQ1A0458/Auth-service.git',
-                                credentialsId: 'github-creds'
-                            ]]
-                        ])
+                        checkout scm
                     }
-                    // Checkout Otp-service
+                    // Checkout otp-service
                     dir('Otp-service') {
-                        checkout([
-                            $class: 'GitSCM',
-                            branches: [[name: '*/master']],
-                            userRemoteConfigs: [[
-                                url: 'https://github.com/20BQ1A0458/Otp-service.git',
-                                credentialsId: 'github-creds'
-                            ]]
-                        ])
+                        checkout scm
                     }
-                    // Checkout Mail-service
+                    // Checkout mail-service
                     dir('Mail-service') {
-                        checkout([
-                            $class: 'GitSCM',
-                            branches: [[name: '*/master']],
-                            userRemoteConfigs: [[
-                                url: 'https://github.com/20BQ1A0458/Mail-service.git',
-                                credentialsId: 'github-creds'
-                            ]]
-                        ])
+                        checkout scm
                     }
                 }
             }
@@ -87,7 +66,7 @@ pipeline {
                                 // Windows command to login to Docker Hub using the credentials
                                 bat 'docker login -u %DOCKER_HUB_USERNAME% -p %DOCKER_HUB_PASSWORD%'
                                 // Windows command to push Docker image
-                                bat 'docker push %DOCKER_HUB_USERNAME%/Auth-service:latest'
+                                bat 'docker push %DOCKER_HUB_USERNAME%/auth-service:latest'
                             }
                         }
                     }
@@ -97,7 +76,7 @@ pipeline {
                         script {
                             withCredentials([usernamePassword(credentialsId: 'docker-c', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
                                 // Windows command to push Docker image
-                                bat 'docker push %DOCKER_HUB_USERNAME%/Otp-service:latest'
+                                bat 'docker push %DOCKER_HUB_USERNAME%/otp-service:latest'
                             }
                         }
                     }
@@ -107,7 +86,7 @@ pipeline {
                         script {
                             withCredentials([usernamePassword(credentialsId: 'docker-c', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
                                 // Windows command to push Docker image
-                                bat 'docker push %DOCKER_HUB_USERNAME%/Mail-service:latest'
+                                bat 'docker push %DOCKER_HUB_USERNAME%/mail-service:latest'
                             }
                         }
                     }
