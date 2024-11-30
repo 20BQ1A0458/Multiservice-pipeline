@@ -14,8 +14,8 @@ pipeline {
                             $class: 'GitSCM',
                             branches: [[name: '*/master']], // or the branch you want to use
                             userRemoteConfigs: [[
-                                url: 'https://github.com/qclairvoyance12/Auth-service.git',
-                                credentialsId: 'github-admin-creds'
+                                url: 'https://github.com/20BQ1A0458/Auth-service.git',
+                                credentialsId: 'github-creds'
                             ]]
                         ])
                     }
@@ -25,8 +25,8 @@ pipeline {
                             $class: 'GitSCM',
                             branches: [[name: '*/master']],
                             userRemoteConfigs: [[
-                                url: 'https://github.com/qclairvoyance12/Otp-service.git',
-                                credentialsId: 'github-admin-creds'
+                                url: 'https://github.com/20BQ1A0458/Otp-service.git',
+                                credentialsId: 'github-creds'
                             ]]
                         ])
                     }
@@ -36,8 +36,8 @@ pipeline {
                             $class: 'GitSCM',
                             branches: [[name: '*/master']],
                             userRemoteConfigs: [[
-                                url: 'https://github.com/qclairvoyance12/Mail-service.git',
-                                credentialsId: 'github-admin-creds'
+                                url: 'https://github.com/20BQ1A0458/Mail-service.git',
+                                credentialsId: 'github-creds'
                             ]]
                         ])
                     }
