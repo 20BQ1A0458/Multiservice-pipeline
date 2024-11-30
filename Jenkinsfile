@@ -1,93 +1,62 @@
 pipeline {
     agent any
     environment {
-        DOCKER_HUB_USERNAME = 'bhargavram458' // This can be kept as plain text in the script
+        DOCKER_REGISTRY = 'bhargavram458'  // Replace with your Docker Hub username
+        REGISTRY_CREDENTIALS = 'docker-c'  // Replace with the credentials ID for Docker Hub
+        GITHUB_CREDENTIALS = 'github-admin-creds'  // Replace with the credentials ID for GitHub
     }
     stages {
-        stage('Checkout Repos') {
-            steps {
-                script {
-                    // Checkout code for all three repositories
-                    // Checkout Auth-service
-                    dir('Auth-service') {
-                        checkout scm
+        stage('Checkout Repositories') {
+            parallel {
+                stage('Auth Service') {
+                    steps {
+                        script {
+                            echo 'Cloning AuthService repository'
+                            git credentialsId: GITHUB_CREDENTIALS, branch: 'main', url: 'https://github.com/qclairvoyance12/AuthService.git'
+                        }
                     }
-                    // Checkout Otp-service
-                    dir('Otp-service') {
-                        checkout scm
+                }
+                stage('OTP Service') {
+                    steps {
+                        script {
+                            echo 'Cloning OtpService repository'
+                            git credentialsId: GITHUB_CREDENTIALS, branch: 'main', url: 'https://github.com/qclairvoyance12/OtpService.git'
+                        }
                     }
-                    // Checkout Mail-service
-                    dir('Mail-service') {
-                        checkout scm
+                }
+                stage('Mail Service') {
+                    steps {
+                        script {
+                            echo 'Cloning MailService repository'
+                            git credentialsId: GITHUB_CREDENTIALS, branch: 'main', url: 'https://github.com/qclairvoyance12/MailService.git'
+                        }
                     }
                 }
             }
         }
-        stage('Build Docker Images') {
+        stage('Build Services') {
             parallel {
                 stage('Build Auth Service') {
                     steps {
                         script {
-                            dir('Auth-service') {
-                                // Windows command to build Docker image
-                                bat 'docker build -t %DOCKER_HUB_USERNAME%/Auth-service:latest .'
-                            }
+                            echo 'Building AuthService Docker image'
+                            bat 'cd AuthService && docker build -t %DOCKER_REGISTRY%/authservice .'
                         }
                     }
                 }
                 stage('Build OTP Service') {
                     steps {
                         script {
-                            dir('Otp-service') {
-                                // Windows command to build Docker image
-                                bat 'docker build -t %DOCKER_HUB_USERNAME%/Otp-service:latest .'
-                            }
+                            echo 'Building OtpService Docker image'
+                            bat 'cd OtpService && docker build -t %DOCKER_REGISTRY%/otpservice .'
                         }
                     }
                 }
                 stage('Build Mail Service') {
                     steps {
                         script {
-                            dir('Mail-service') {
-                                // Windows command to build Docker image
-                                bat 'docker build -t %DOCKER_HUB_USERNAME%/Mail-service:latest .'
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        stage('Push Docker Images') {
-            parallel {
-                stage('Push Auth Service') {
-                    steps {
-                        script {
-                            withCredentials([usernamePassword(credentialsId: 'docker-c', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
-                                // Windows command to login to Docker Hub using the credentials
-                                bat 'docker login -u %DOCKER_HUB_USERNAME% -p %DOCKER_HUB_PASSWORD%'
-                                // Windows command to push Docker image
-                                bat 'docker push %DOCKER_HUB_USERNAME%/Auth-service:latest'
-                            }
-                        }
-                    }
-                }
-                stage('Push OTP Service') {
-                    steps {
-                        script {
-                            withCredentials([usernamePassword(credentialsId: 'docker-c', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
-                                // Windows command to push Docker image
-                                bat 'docker push %DOCKER_HUB_USERNAME%/Otp-service:latest'
-                            }
-                        }
-                    }
-                }
-                stage('Push Mail Service') {
-                    steps {
-                        script {
-                            withCredentials([usernamePassword(credentialsId: 'docker-c', usernameVariable: 'DOCKER_HUB_USERNAME', passwordVariable: 'DOCKER_HUB_PASSWORD')]) {
-                                // Windows command to push Docker image
-                                bat 'docker push %DOCKER_HUB_USERNAME%/Mail-service:latest'
-                            }
+                            echo 'Building MailService Docker image'
+                            bat 'cd MailService && docker build -t %DOCKER_REGISTRY%/mailservice .'
                         }
                     }
                 }
@@ -96,17 +65,28 @@ pipeline {
         stage('Deploy with Docker Compose') {
             steps {
                 script {
-                    // Ensure Docker Compose file exists and deploy using it (Windows command)
-                    bat 'docker-compose -f docker-compose.yml up -d'
+                    echo 'Deploying with Docker Compose'
+                    bat '''
+                    REM Navigate to the directory containing docker-compose.yml
+                    cd C:\\Users\\gowri\\multi
+                    
+                    REM Run Docker Compose to bring up the services
+                    docker-compose -f docker-compose.yml up -d
+                    '''
                 }
             }
         }
     }
     post {
         always {
-            cleanWs() // Clean workspace after run
+            echo 'Cleaning up...'
+            bat 'docker system prune -f'  // Clean up Docker resources
+        }
+        success {
+            echo 'Pipeline executed successfully.'
+        }
+        failure {
+            echo 'Pipeline failed.'
         }
     }
 }
-
-
